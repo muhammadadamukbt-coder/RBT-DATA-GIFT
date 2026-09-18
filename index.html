@@ -1,749 +1,1338 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RBT DATA GIFT</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+    <meta name="theme-color" content="#050505">
 
-    body {
-      background: #f7f7f7;
-      color: #111;
-    }
+    <title>RBT DATA GIFT</title>
 
-    /* HEADER */
-    header {
-      background: #ffffff;
-      border-bottom: 1px solid #e8e8e8;
-      padding: 14px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 800;
-      font-size: 18px;
-    }
-
-    .rabbit {
-      width: 38px;
-      height: 38px;
-      background: #111;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 21px;
-    }
-
-    .menu-btn {
-      border: none;
-      background: #f1f1f1;
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      font-size: 20px;
-    }
-
-    /* HERO */
-    .hero {
-      padding: 28px 18px 15px;
-    }
-
-    .hero-card {
-      background: #111;
-      color: white;
-      border-radius: 22px;
-      padding: 25px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-card h1 {
-      font-size: 28px;
-      margin-bottom: 10px;
-    }
-
-    .hero-card p {
-      color: #cfcfcf;
-      line-height: 1.5;
-      margin-bottom: 20px;
-    }
-
-    .hero-btn {
-      border: none;
-      background: white;
-      color: #111;
-      padding: 13px 18px;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    /* SECTION */
-    .section {
-      padding: 20px 18px;
-    }
-
-    .section-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-    }
-
-    .section-title h2 {
-      font-size: 20px;
-    }
-
-    .section-title span {
-      color: #777;
-      font-size: 13px;
-    }
-
-    /* PACKAGES */
-    .packages {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-
-    .package {
-      background: white;
-      border: 1px solid #e8e8e8;
-      border-radius: 18px;
-      padding: 16px;
-      box-shadow: 0 4px 15px rgba(0,0,0,.04);
-    }
-
-    .package-number {
-      font-size: 12px;
-      color: #888;
-      margin-bottom: 10px;
-    }
-
-    .package h3 {
-      font-size: 22px;
-      margin-bottom: 5px;
-    }
-
-    .package .duration {
-      color: #777;
-      font-size: 13px;
-      margin-bottom: 14px;
-    }
-
-    .price {
-      font-size: 18px;
-      font-weight: 800;
-      margin-bottom: 13px;
-    }
-
-    .buy-btn {
-      width: 100%;
-      border: none;
-      background: #111;
-      color: white;
-      padding: 11px;
-      border-radius: 11px;
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    /* REFERRAL */
-    .referral {
-      background: white;
-      border-radius: 20px;
-      border: 1px solid #e8e8e8;
-      padding: 20px;
-    }
-
-    .referral-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-
-    .gift {
-      width: 45px;
-      height: 45px;
-      border-radius: 14px;
-      background: #111;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-    }
-
-    .progress-bg {
-      height: 10px;
-      background: #e9e9e9;
-      border-radius: 20px;
-      overflow: hidden;
-      margin: 12px 0;
-    }
-
-    .progress {
-      height: 100%;
-      width: 70%;
-      background: #111;
-      border-radius: 20px;
-    }
-
-    .referral-text {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 14px;
-    }
-
-    .claim-btn {
-      width: 100%;
-      padding: 13px;
-      border: none;
-      border-radius: 12px;
-      background: #111;
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .claim-btn:disabled {
-      background: #ddd;
-      color: #888;
-      cursor: not-allowed;
-    }
-
-    /* NAVIGATION */
-    .bottom-nav {
-      position: sticky;
-      bottom: 0;
-      background: rgba(255,255,255,.96);
-      border-top: 1px solid #e8e8e8;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      padding: 10px 5px;
-      margin-top: 25px;
-    }
-
-    .nav-item {
-      border: none;
-      background: none;
-      padding: 7px;
-      color: #777;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    .nav-item strong {
-      display: block;
-      font-size: 18px;
-      margin-bottom: 3px;
-    }
-
-    /* MODAL */
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.55);
-      z-index: 200;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-box {
-      background: white;
-      width: 100%;
-      max-width: 430px;
-      border-radius: 22px;
-      padding: 22px;
-    }
-
-    .modal-box h2 {
-      margin-bottom: 8px;
-    }
-
-    .selected-package {
-      background: #f5f5f5;
-      padding: 13px;
-      border-radius: 12px;
-      margin: 15px 0;
-      font-weight: 700;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 13px;
-      margin-bottom: 12px;
-      border: 1px solid #ddd;
-      border-radius: 11px;
-      outline: none;
-      font-size: 15px;
-    }
-
-    .pay-btn {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      background: #111;
-      color: white;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .close-btn {
-      width: 100%;
-      padding: 12px;
-      margin-top: 8px;
-      border: none;
-      background: #eee;
-      border-radius: 12px;
-      cursor: pointer;
-    }
-
-    @media (min-width: 700px) {
-      .packages {
-        grid-template-columns: repeat(4, 1fr);
-      }
-
-      .hero, .section {
-        max-width: 1100px;
-        margin: auto;
-      }
-
-      .bottom-nav {
-        max-width: 700px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-    }
-  </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- HEADER -->
-  <header>
-    <div class="brand">
-      <div class="rabbit">🐇</div>
-      <span>RBT DATA GIFT</span>
-    </div>
+    <!-- =====================================================
+         RBT DATA GIFT APP
+    ====================================================== -->
 
-    <button class="menu-btn">☰</button>
-  </header>
+    <div class="app-shell">
 
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-card">
-      <h1>Data Made Simple.</h1>
+        <!-- =================================================
+             TOP HEADER
+        ================================================== -->
 
-      <p>
-        Get affordable data packages and enjoy monthly,
-        multi-month and yearly plans.
-      </p>
+        <header class="top-header">
 
-      <button class="hero-btn" onclick="scrollToPackages()">
-        Browse Packages
-      </button>
-    </div>
-  </section>
+            <div class="brand-area">
 
+                <div class="brand-logo">
+                    🐇
+                </div>
 
-  <!-- PACKAGES -->
-  <section class="section" id="packages">
+                <div class="brand-text">
+                    <h1>RBT DATA GIFT</h1>
+                    <p>Fast • Simple • Reliable</p>
+                </div>
 
-    <div class="section-title">
-      <h2>Data Packages</h2>
-      <span>10 Plans</span>
-    </div>
-
-    <div class="packages" id="packageContainer"></div>
-
-  </section>
+            </div>
 
 
-  <!-- REFERRAL -->
-  <section class="section">
+            <button
+                class="header-profile"
+                type="button"
+                onclick="showPage('profile')"
+                aria-label="Open profile"
+            >
+                <span>👤</span>
+            </button>
 
-    <div class="section-title">
-      <h2>Invite & Earn</h2>
-      <span>10GB Reward</span>
-    </div>
+        </header>
 
-    <div class="referral">
 
-      <div class="referral-top">
 
-        <div>
-          <h3>🎁 10GB Monthly Data</h3>
-          <p style="color:#777;margin-top:5px;">
-            Invite 10 people to unlock your reward.
-          </p>
+        <!-- =================================================
+             MAIN CONTENT
+        ================================================== -->
+
+        <main class="main-content">
+
+
+            <!-- =================================================
+                 HOME PAGE
+            ================================================== -->
+
+            <section
+                id="home"
+                class="page active-page"
+            >
+
+
+                <!-- ===============================
+                     HERO / BANNER
+                ================================ -->
+
+                <div class="hero-banner">
+
+                    <div class="hero-background-glow"></div>
+
+
+                    <div class="hero-content">
+
+                        <div class="hero-label">
+                            <span class="live-dot"></span>
+                            RBT DATA GIFT
+                        </div>
+
+
+                        <h2>
+                            Stay connected.
+                            <span>Stay ahead.</span>
+                        </h2>
+
+
+                        <p>
+                            Get affordable data packages
+                            with a fast and simple experience.
+                        </p>
+
+
+                        <button
+                            class="hero-button"
+                            type="button"
+                            onclick="showPage('packages')"
+                        >
+                            <span>Browse Packages</span>
+                            <strong>→</strong>
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- =================================
+                         HERO VISUAL
+                    ================================== -->
+
+                    <div class="hero-visual">
+
+                        <div class="hero-glow"></div>
+
+
+                        <!-- PERSON -->
+
+                        <div class="hero-person">
+
+                            <div class="person-hair"></div>
+
+                            <div class="person-head">
+
+                                <div class="person-eye eye-left"></div>
+                                <div class="person-eye eye-right"></div>
+
+                                <div class="person-smile"></div>
+
+                            </div>
+
+
+                            <div class="person-neck"></div>
+
+                            <div class="person-shirt"></div>
+
+                            <div class="person-arm"></div>
+
+                        </div>
+
+
+
+                        <!-- PHONE -->
+
+                        <div class="hero-phone">
+
+                            <div class="phone-frame">
+
+                                <div class="phone-speaker"></div>
+
+                                <div class="phone-screen">
+
+                                    <div class="phone-status">
+                                        <span>9:41</span>
+                                        <span>● ● ●</span>
+                                    </div>
+
+
+                                    <div class="phone-rbt">
+                                        RBT
+                                    </div>
+
+
+                                    <div class="phone-data">
+                                        100GB
+                                    </div>
+
+
+                                    <div class="phone-caption">
+                                        DATA ACTIVE
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- FLOATING DATA EFFECTS -->
+
+                        <div class="data-particle particle-1">
+                            7GB
+                        </div>
+
+                        <div class="data-particle particle-2">
+                            35GB
+                        </div>
+
+                        <div class="data-particle particle-3">
+                            5G
+                        </div>
+
+                        <div class="data-particle particle-4">
+                            📶
+                        </div>
+
+                        <div class="data-particle particle-5">
+                            +DATA
+                        </div>
+
+                        <div class="data-particle particle-6">
+                            ⚡
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     DATA USAGE DASHBOARD
+                ================================================== -->
+
+                <div class="section-title-row">
+
+                    <div>
+                        <span>DASHBOARD</span>
+                        <h2>Data Usage</h2>
+                    </div>
+
+                    <button
+                        class="small-action"
+                        type="button"
+                    >
+                        •••
+                    </button>
+
+                </div>
+
+
+
+                <div class="usage-dashboard">
+
+
+                    <!-- DATA METER -->
+
+                    <div class="usage-card">
+
+                        <div class="usage-card-top">
+
+                            <div>
+                                <span class="card-label">
+                                    CURRENT PLAN
+                                </span>
+
+                                <h3>
+                                    RBT 100GB
+                                </h3>
+                            </div>
+
+
+                            <div class="usage-network">
+                                📶
+                            </div>
+
+                        </div>
+
+
+                        <div class="data-meter">
+
+                            <div class="meter-ring">
+
+                                <div class="meter-center">
+
+                                    <strong>
+                                        72%
+                                    </strong>
+
+                                    <span>
+                                        Used
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="usage-stat-row">
+
+                            <div class="usage-stat">
+                                <strong>72GB</strong>
+                                <span>Used</span>
+                            </div>
+
+                            <div class="usage-stat">
+                                <strong>28GB</strong>
+                                <span>Remaining</span>
+                            </div>
+
+                            <div class="usage-stat">
+                                <strong>100GB</strong>
+                                <span>Total</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- QUICK ACTION -->
+
+                    <div class="quick-action-card">
+
+                        <div class="quick-action-icon">
+                            ⚡
+                        </div>
+
+                        <span class="card-label">
+                            QUICK BUY
+                        </span>
+
+                        <h3>
+                            Need more
+                            <br>
+                            data?
+                        </h3>
+
+                        <p>
+                            Choose a package
+                            in seconds.
+                        </p>
+
+                        <button
+                            type="button"
+                            onclick="showPage('packages')"
+                        >
+                            Buy Data
+                            <span>→</span>
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     PACKAGE PREVIEW
+                ================================================== -->
+
+                <div class="section-title-row package-heading">
+
+                    <div>
+                        <span>RBT COLLECTION</span>
+                        <h2>Package Preview</h2>
+                    </div>
+
+                    <button
+                        class="view-all-button"
+                        type="button"
+                        onclick="showPage('packages')"
+                    >
+                        View all →
+                    </button>
+
+                </div>
+
+
+
+                <!--
+                    JavaScript will render the package cards here.
+                    This container MUST remain in the HTML.
+                -->
+
+                <div
+                    id="homePackages"
+                    class="package-preview-grid"
+                ></div>
+
+
+
+                <!-- =================================================
+                     NETWORK PREVIEW
+                ================================================== -->
+
+                <div class="section-title-row">
+
+                    <div>
+                        <span>SUPPORTED NETWORKS</span>
+                        <h2>Select Your Network</h2>
+                    </div>
+
+                </div>
+
+
+                <div class="network-preview-grid">
+
+
+                    <button
+                        class="network-preview mtn"
+                        type="button"
+                        onclick="showPage('packages')"
+                    >
+                        <span class="network-symbol">MTN</span>
+                        <strong>MTN</strong>
+                    </button>
+
+
+                    <button
+                        class="network-preview airtel"
+                        type="button"
+                        onclick="showPage('packages')"
+                    >
+                        <span class="network-symbol">A</span>
+                        <strong>Airtel</strong>
+                    </button>
+
+
+                    <button
+                        class="network-preview glo"
+                        type="button"
+                        onclick="showPage('packages')"
+                    >
+                        <span class="network-symbol">Glo</span>
+                        <strong>Glo</strong>
+                    </button>
+
+
+                    <button
+                        class="network-preview nine-mobile"
+                        type="button"
+                        onclick="showPage('packages')"
+                    >
+                        <span class="network-symbol">9</span>
+                        <strong>9mobile</strong>
+                    </button>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     REFERRAL BANNER
+                ================================================== -->
+
+                <div class="home-referral-banner">
+
+                    <div class="referral-banner-glow"></div>
+
+
+                    <div class="referral-banner-icon">
+                        🎁
+                    </div>
+
+
+                    <div class="referral-banner-content">
+
+                        <span>
+                            RBT REWARD
+                        </span>
+
+                        <h2>
+                            Invite 10 people.
+                            Get 111GB.
+                        </h2>
+
+                        <p>
+                            Every qualifying ₦999 purchase
+                            counts toward your reward.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        onclick="showPage('referral')"
+                    >
+                        <span>View Reward</span>
+                        <strong>→</strong>
+                    </button>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 PACKAGES PAGE
+            ================================================== -->
+
+            <section
+                id="packages"
+                class="page"
+            >
+
+
+                <div class="page-header">
+
+                    <span>
+                        RBT DATA GIFT
+                    </span>
+
+                    <h2>
+                        Data Packages
+                    </h2>
+
+                    <p>
+                        Select a package and stay connected.
+                    </p>
+
+                </div>
+
+
+
+                <!-- PACKAGE FILTER / INFO -->
+
+                <div class="package-toolbar">
+
+                    <div class="package-count">
+                        <span>AVAILABLE</span>
+                        <strong>10 Packages</strong>
+                    </div>
+
+                    <div class="package-sort">
+                        Popular
+                        <span>⌄</span>
+                    </div>
+
+                </div>
+
+
+
+                <!--
+                    JavaScript renders ALL 10 packages here.
+                -->
+
+                <div
+                    id="packageContainer"
+                    class="all-packages-grid"
+                ></div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 REFERRAL PAGE
+            ================================================== -->
+
+            <section
+                id="referral"
+                class="page"
+            >
+
+
+                <div class="page-header">
+
+                    <span>
+                        RBT REWARDS
+                    </span>
+
+                    <h2>
+                        Referral Program
+                    </h2>
+
+                    <p>
+                        Share RBT and unlock your 111GB reward.
+                    </p>
+
+                </div>
+
+
+
+                <!-- REWARD CARD -->
+
+                <div class="referral-reward-card">
+
+                    <div class="reward-glow"></div>
+
+
+                    <div class="reward-top">
+
+                        <div class="reward-icon">
+                            🎁
+                        </div>
+
+                        <span>
+                            RBT REWARD
+                        </span>
+
+                    </div>
+
+
+                    <h2>
+                        111GB
+                    </h2>
+
+
+                    <p>
+                        Invite 10 people and make sure
+                        each person completes a successful
+                        ₦999 qualifying purchase.
+                    </p>
+
+
+                    <!-- REFERRAL CODE -->
+
+                    <div class="referral-code-section">
+
+                        <div>
+
+                            <span>
+                                YOUR REFERRAL CODE
+                            </span>
+
+                            <strong id="referralCode">
+                                RBT-LOADING
+                            </strong>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            onclick="copyReferralCode()"
+                            aria-label="Copy referral code"
+                        >
+                            📋
+                        </button>
+
+                    </div>
+
+
+                    <!-- REFERRAL PROGRESS -->
+
+                    <div class="referral-progress-section">
+
+                        <div class="progress-header">
+
+                            <span>
+                                Successful referrals
+                            </span>
+
+                            <strong id="referralCount">
+                                0/10
+                            </strong>
+
+                        </div>
+
+
+                        <div class="progress-track">
+
+                            <div
+                                id="progressFill"
+                                class="progress-fill"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CLAIM -->
+
+                    <button
+                        id="claimButton"
+                        class="claim-reward-button"
+                        type="button"
+                        onclick="claimReward()"
+                        disabled
+                    >
+                        10 more needed
+                    </button>
+
+                </div>
+
+
+
+                <!-- HOW REFERRAL WORKS -->
+
+                <div class="section-title-row">
+
+                    <div>
+                        <span>SIMPLE PROCESS</span>
+                        <h2>How It Works</h2>
+                    </div>
+
+                </div>
+
+
+                <div class="referral-steps">
+
+
+                    <div class="referral-step">
+
+                        <div class="step-number">
+                            01
+                        </div>
+
+                        <div class="step-icon">
+                            🔗
+                        </div>
+
+                        <h3>
+                            Share
+                        </h3>
+
+                        <p>
+                            Share your unique RBT
+                            referral code.
+                        </p>
+
+                    </div>
+
+
+                    <div class="referral-step">
+
+                        <div class="step-number">
+                            02
+                        </div>
+
+                        <div class="step-icon">
+                            🛒
+                        </div>
+
+                        <h3>
+                            They Buy
+                        </h3>
+
+                        <p>
+                            Your friend buys the
+                            qualifying ₦999 package.
+                        </p>
+
+                    </div>
+
+
+                    <div class="referral-step">
+
+                        <div class="step-number">
+                            03
+                        </div>
+
+                        <div class="step-icon">
+                            📈
+                        </div>
+
+                        <h3>
+                            Reach 10
+                        </h3>
+
+                        <p>
+                            Complete 10 qualifying
+                            successful purchases.
+                        </p>
+
+                    </div>
+
+
+                    <div class="referral-step">
+
+                        <div class="step-number">
+                            04
+                        </div>
+
+                        <div class="step-icon">
+                            🎁
+                        </div>
+
+                        <h3>
+                            Claim
+                        </h3>
+
+                        <p>
+                            Claim your 111GB reward.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 PROFILE PAGE
+            ================================================== -->
+
+            <section
+                id="profile"
+                class="page"
+            >
+
+
+                <div class="page-header">
+
+                    <span>
+                        RBT ACCOUNT
+                    </span>
+
+                    <h2>
+                        My Profile
+                    </h2>
+
+                    <p>
+                        Manage your RBT DATA GIFT account.
+                    </p>
+
+                </div>
+
+
+
+                <!-- PROFILE CARD -->
+
+                <div class="profile-main-card">
+
+                    <div class="profile-avatar">
+                        👤
+                    </div>
+
+
+                    <div class="profile-details">
+
+                        <span>
+                            CUSTOMER
+                        </span>
+
+                        <h2>
+                            RBT Customer
+                        </h2>
+
+                        <p>
+                            RBT DATA GIFT
+                        </p>
+
+                    </div>
+
+
+                    <div class="profile-status">
+                        <span></span>
+                        Active
+                    </div>
+
+                </div>
+
+
+
+                <!-- PROFILE MENU -->
+
+                <div class="profile-menu">
+
+
+                    <button
+                        type="button"
+                        class="profile-menu-item"
+                    >
+
+                        <span class="menu-icon">
+                            📦
+                        </span>
+
+                        <span class="menu-text">
+                            <strong>My Orders</strong>
+                            <small>View your data orders</small>
+                        </span>
+
+                        <span class="menu-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="profile-menu-item"
+                        onclick="showPage('referral')"
+                    >
+
+                        <span class="menu-icon">
+                            🎁
+                        </span>
+
+                        <span class="menu-text">
+                            <strong>Referral Rewards</strong>
+                            <small>Track your 111GB reward</small>
+                        </span>
+
+                        <span class="menu-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="profile-menu-item"
+                    >
+
+                        <span class="menu-icon">
+                            💬
+                        </span>
+
+                        <span class="menu-text">
+                            <strong>Help & Support</strong>
+                            <small>Get assistance</small>
+                        </span>
+
+                        <span class="menu-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="profile-menu-item"
+                    >
+
+                        <span class="menu-icon">
+                            ⚙️
+                        </span>
+
+                        <span class="menu-text">
+                            <strong>Settings</strong>
+                            <small>Account preferences</small>
+                        </span>
+
+                        <span class="menu-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+
+                <!-- ACCOUNT INFORMATION -->
+
+                <div class="account-info-card">
+
+                    <div class="account-info-heading">
+
+                        <span>
+                            RBT DATA GIFT
+                        </span>
+
+                        <strong>
+                            Account Information
+                        </strong>
+
+                    </div>
+
+
+                    <div class="account-info-row">
+
+                        <span>
+                            Account status
+                        </span>
+
+                        <strong>
+                            Active
+                        </strong>
+
+                    </div>
+
+
+                    <div class="account-info-row">
+
+                        <span>
+                            Referral progress
+                        </span>
+
+                        <strong>
+                            <span id="profileReferralCount">
+                                0/10
+                            </span>
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+
+        <!-- =================================================
+             ORDER MODAL
+        ================================================== -->
+
+        <div
+            id="orderModal"
+            class="modal"
+            aria-hidden="true"
+        >
+
+            <div class="modal-overlay"></div>
+
+
+            <div class="modal-card">
+
+
+                <button
+                    class="modal-close"
+                    type="button"
+                    onclick="closeOrder()"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+
+
+                <div class="modal-header">
+
+                    <span>
+                        RBT DATA GIFT
+                    </span>
+
+                    <h2>
+                        Complete Your Order
+                    </h2>
+
+                    <p>
+                        Enter your details below.
+                    </p>
+
+                </div>
+
+
+
+                <!-- SELECTED PACKAGE -->
+
+                <div
+                    id="selectedPackage"
+                    class="selected-package"
+                >
+
+                    <div class="selected-package-placeholder">
+                        Select a package
+                    </div>
+
+                </div>
+
+
+
+                <!-- FULL NAME -->
+
+                <div class="form-group">
+
+                    <label for="fullName">
+                        Full Name
+                    </label>
+
+                    <input
+                        id="fullName"
+                        type="text"
+                        placeholder="Enter your full name"
+                        autocomplete="name"
+                    >
+
+                </div>
+
+
+
+                <!-- PHONE -->
+
+                <div class="form-group">
+
+                    <label for="phoneNumber">
+                        Phone Number
+                    </label>
+
+                    <input
+                        id="phoneNumber"
+                        type="tel"
+                        placeholder="08012345678"
+                        inputmode="numeric"
+                        autocomplete="tel"
+                    >
+
+                </div>
+
+
+
+                <!-- NETWORK -->
+
+                <div class="form-group">
+
+                    <label>
+                        Select Network
+                    </label>
+
+
+                    <div class="network-selector">
+
+
+                        <!-- MTN -->
+
+                        <button
+                            type="button"
+                            class="network-option"
+                            data-network="MTN"
+                            onclick="selectNetwork('MTN')"
+                        >
+
+                            <span class="network-logo network-mtn">
+                                MTN
+                            </span>
+
+                            <span class="network-name">
+                                MTN
+                            </span>
+
+                        </button>
+
+
+
+                        <!-- AIRTEL -->
+
+                        <button
+                            type="button"
+                            class="network-option"
+                            data-network="Airtel"
+                            onclick="selectNetwork('Airtel')"
+                        >
+
+                            <span class="network-logo network-airtel">
+                                A
+                            </span>
+
+                            <span class="network-name">
+                                Airtel
+                            </span>
+
+                        </button>
+
+
+
+                        <!-- GLO -->
+
+                        <button
+                            type="button"
+                            class="network-option"
+                            data-network="Glo"
+                            onclick="selectNetwork('Glo')"
+                        >
+
+                            <span class="network-logo network-glo">
+                                Glo
+                            </span>
+
+                            <span class="network-name">
+                                Glo
+                            </span>
+
+                        </button>
+
+
+
+                        <!-- 9MOBILE -->
+
+                        <button
+                            type="button"
+                            class="network-option"
+                            data-network="9mobile"
+                            onclick="selectNetwork('9mobile')"
+                        >
+
+                            <span class="network-logo network-9mobile">
+                                9
+                            </span>
+
+                            <span class="network-name">
+                                9mobile
+                            </span>
+
+                        </button>
+
+                    </div>
+
+
+                    <input
+                        id="network"
+                        type="hidden"
+                    >
+
+                </div>
+
+
+
+                <!-- PAYMENT BUTTON -->
+
+                <button
+                    class="continue-payment-button"
+                    type="button"
+                    onclick="startPayment()"
+                >
+
+                    <span>
+                        Continue to Payment
+                    </span>
+
+                    <strong>
+                        →
+                    </strong>
+
+                </button>
+
+
+                <div class="secure-payment-note">
+                    🔒 Secure checkout
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="gift">🎁</div>
 
-      </div>
 
-      <strong id="referralCount">7 / 10 Referrals</strong>
+        <!-- =================================================
+             NOTIFICATION
+        ================================================== -->
 
-      <div class="progress-bg">
-        <div class="progress" id="progressBar"></div>
-      </div>
+        <div
+            id="notification"
+            class="notification"
+            role="status"
+        ></div>
 
-      <p class="referral-text">
-        Invite friends and complete the required referrals.
-        Once you reach 10, you can claim your 10GB reward.
-      </p>
 
-      <button
-        class="claim-btn"
-        id="claimBtn"
-        disabled
-        onclick="claimReward()">
-        Claim 10GB
-      </button>
+
+        <!-- =================================================
+             BOTTOM NAVIGATION
+        ================================================== -->
+
+        <nav class="bottom-navigation">
+
+
+            <button
+                class="nav-item active"
+                data-page="home"
+                type="button"
+                onclick="showPage('home')"
+            >
+
+                <span class="nav-icon">
+                    🏠
+                </span>
+
+                <span class="nav-label">
+                    Home
+                </span>
+
+            </button>
+
+
+
+            <button
+                class="nav-item"
+                data-page="packages"
+                type="button"
+                onclick="showPage('packages')"
+            >
+
+                <span class="nav-icon">
+                    📦
+                </span>
+
+                <span class="nav-label">
+                    Packages
+                </span>
+
+            </button>
+
+
+
+            <button
+                class="nav-item"
+                data-page="referral"
+                type="button"
+                onclick="showPage('referral')"
+            >
+
+                <span class="nav-icon">
+                    🎁
+                </span>
+
+                <span class="nav-label">
+                    Referral
+                </span>
+
+            </button>
+
+
+
+            <button
+                class="nav-item"
+                data-page="profile"
+                type="button"
+                onclick="showPage('profile')"
+            >
+
+                <span class="nav-icon">
+                    👤
+                </span>
+
+                <span class="nav-label">
+                    Profile
+                </span>
+
+            </button>
+
+        </nav>
 
     </div>
 
-  </section>
 
 
-  <!-- BOTTOM NAV -->
-  <nav class="bottom-nav">
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
 
-    <button class="nav-item">
-      <strong>⌂</strong>
-      Home
-    </button>
-
-    <button class="nav-item" onclick="scrollToPackages()">
-      <strong>▣</strong>
-      Packages
-    </button>
-
-    <button class="nav-item">
-      <strong>🎁</strong>
-      Referral
-    </button>
-
-    <button class="nav-item">
-      <strong>◉</strong>
-      Profile
-    </button>
-
-  </nav>
-
-
-  <!-- ORDER MODAL -->
-  <div class="modal" id="orderModal">
-
-    <div class="modal-box">
-
-      <h2>Order Data</h2>
-
-      <p style="color:#777;">
-        Enter your details below.
-      </p>
-
-      <div class="selected-package" id="selectedPackage">
-        Package
-      </div>
-
-      <input
-        type="text"
-        id="customerName"
-        placeholder="Full Name"
-      />
-
-      <input
-        type="tel"
-        id="phoneNumber"
-        placeholder="Phone Number"
-      />
-
-      <select id="network">
-        <option value="">Select Network</option>
-        <option value="MTN">MTN</option>
-        <option value="Airtel">Airtel</option>
-        <option value="Glo">Glo</option>
-        <option value="9mobile">9mobile</option>
-      </select>
-
-      <button class="pay-btn" onclick="startPayment()">
-        Continue to Payment
-      </button>
-
-      <button class="close-btn" onclick="closeModal()">
-        Cancel
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <script>
-
-    const packages = [
-      {
-        id: 1,
-        price: 999,
-        data: "7GB",
-        duration: "1 Month"
-      },
-      {
-        id: 2,
-        price: 4999,
-        data: "35GB",
-        duration: "1 Month"
-      },
-      {
-        id: 3,
-        price: 9999,
-        data: "65GB",
-        duration: "1 Month"
-      },
-      {
-        id: 4,
-        price: 14999,
-        data: "100GB",
-        duration: "2 Months"
-      },
-      {
-        id: 5,
-        price: 19999,
-        data: "140GB",
-        duration: "2 Months"
-      },
-      {
-        id: 6,
-        price: 24999,
-        data: "180GB",
-        duration: "2 Months"
-      },
-      {
-        id: 7,
-        price: 29999,
-        data: "220GB",
-        duration: "3 Months"
-      },
-      {
-        id: 8,
-        price: 34999,
-        data: "260GB",
-        duration: "6 Months"
-      },
-      {
-        id: 9,
-        price: 39999,
-        data: "299GB",
-        duration: "10 Months"
-      },
-      {
-        id: 10,
-        price: 49999,
-        data: "350GB",
-        duration: "1 Year"
-      }
-    ];
-
-
-    const container =
-      document.getElementById("packageContainer");
-
-
-    function formatNaira(amount) {
-
-      return "₦" + amount.toLocaleString("en-NG");
-
-    }
-
-
-    function displayPackages() {
-
-      container.innerHTML = "";
-
-      packages.forEach(pkg => {
-
-        const card = document.createElement("div");
-
-        card.className = "package";
-
-        card.innerHTML = `
-
-          <div class="package-number">
-            PLAN ${pkg.id}
-          </div>
-
-          <h3>${pkg.data}</h3>
-
-          <div class="duration">
-            ${pkg.duration}
-          </div>
-
-          <div class="price">
-            ${formatNaira(pkg.price)}
-          </div>
-
-          <button
-            class="buy-btn"
-            onclick="openOrder(${pkg.id})">
-            Buy Now
-          </button>
-
-        `;
-
-        container.appendChild(card);
-
-      });
-
-    }
-
-
-    let selectedPlan = null;
-
-
-    function openOrder(id) {
-
-      selectedPlan =
-        packages.find(pkg => pkg.id === id);
-
-      document.getElementById("selectedPackage")
-        .innerText =
-        `${selectedPlan.data} • ${selectedPlan.duration} • ${formatNaira(selectedPlan.price)}`;
-
-      document.getElementById("orderModal")
-        .classList.add("active");
-
-    }
-
-
-    function closeModal() {
-
-      document.getElementById("orderModal")
-        .classList.remove("active");
-
-    }
-
-
-    function startPayment() {
-
-      const name =
-        document.getElementById("customerName").value.trim();
-
-      const phone =
-        document.getElementById("phoneNumber").value.trim();
-
-      const network =
-        document.getElementById("network").value;
-
-      if (!name || !phone || !network) {
-
-        alert("Please complete all fields.");
-
-        return;
-
-      }
-
-      /*
-        PAYSTACK WILL BE CONNECTED HERE.
-
-        IMPORTANT:
-        Do not put your Paystack SECRET KEY
-        inside this frontend file.
-
-        We will connect payment securely
-        through a backend in the next stage.
-      */
-
-      alert(
-        "Order ready! Paystack will be connected in the next stage."
-      );
-
-    }
-
-
-    let referralCount = 7;
-
-    function updateReferral() {
-
-      document.getElementById("referralCount")
-        .innerText =
-        `${referralCount} / 10 Referrals`;
-
-      document.getElementById("progressBar")
-        .style.width =
-        `${(referralCount / 10) * 100}%`;
-
-      const claimBtn =
-        document.getElementById("claimBtn");
-
-      if (referralCount >= 10) {
-
-        claimBtn.disabled = false;
-
-      } else {
-
-        claimBtn.disabled = true;
-
-      }
-
-    }
-
-
-    function claimReward() {
-
-      if (referralCount >= 10) {
-
-        alert(
-          "Your 10GB reward claim has been submitted."
-        );
-
-      }
-
-    }
-
-
-    function scrollToPackages() {
-
-      document.getElementById("packages")
-        .scrollIntoView({
-          behavior: "smooth"
-        });
-
-    }
-
-
-    displayPackages();
-
-    updateReferral();
-
-  </script>
+    <script src="script.js"></script>
 
 </body>
 </html>
