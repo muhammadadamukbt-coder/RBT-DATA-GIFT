@@ -1,283 +1,124 @@
-/* =========================================================
-   RBT DATA GIFT
-   PAYSTACK VERIFY TRANSACTION
-   VERCEL FUNCTION
-========================================================= */
+export default async (request) => {
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "GET, OPTIONS",
+    "Content-Type": "application/json"
+  };
 
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers
+    });
+  }
 
-/* =========================================================
-   CORS HEADERS
-========================================================= */
-
-function corsHeaders() {
-
-    return {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods":
-            "GET, OPTIONS",
-        "Access-Control-Allow-Headers":
-            "Content-Type",
-        "Content-Type":
-            "application/json"
-    };
-}
-
-
-/* =========================================================
-   JSON RESPONSE
-========================================================= */
-
-function jsonResponse(data, status = 200) {
-
+  if (request.method !== "GET") {
     return new Response(
-        JSON.stringify(data),
-        {
-            status: status,
-            headers: corsHeaders()
-        }
+      JSON.stringify({
+        success: false,
+        message: "Only GET requests are allowed."
+      }),
+      {
+        status: 405,
+        headers
+      }
     );
-}
+  }
 
+  try {
+    const secretKey = Netlify.env.get("PAYSTACK_SECRET_KEY");
 
-/* =========================================================
-   VERCEL FUNCTION
-========================================================= */
-
-export default {
-
-    async fetch(request) {
-
-        /* -------------------------
-           CORS PREFLIGHT
-        ------------------------- */
-
-        if (request.method === "OPTIONS") {
-
-            return new Response(
-                null,
-                {
-                    status: 204,
-                    headers: corsHeaders()
-                }
-            );
-
+    if (!secretKey) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "PAYSTACK_SECRET_KEY is not configured."
+        }),
+        {
+          status: 500,
+          headers
         }
-
-
-        /* -------------------------
-           ONLY GET
-        ------------------------- */
-
-        if (request.method !== "GET") {
-
-            return jsonResponse(
-                {
-                    success: false,
-                    message:
-                        "Only GET requests are allowed"
-                },
-                405
-            );
-
-        }
-
-
-        try {
-
-            /* -------------------------
-               SECRET KEY
-            ------------------------- */
-
-            const secretKey =
-                process.env.PAYSTACK_SECRET_KEY;
-
-
-            if (!secretKey) {
-
-                return jsonResponse(
-                    {
-                        success: false,
-                        message:
-                            "Paystack secret key is not configured"
-                    },
-                    500
-                );
-
-            }
-
-
-            /* -------------------------
-               GET REFERENCE
-            ------------------------- */
-
-            const url =
-                new URL(request.url);
-
-
-            const reference =
-                url.searchParams.get(
-                    "reference"
-                );
-
-
-            if (!reference) {
-
-                return jsonResponse(
-                    {
-                        success: false,
-                        message:
-                            "Transaction reference is required"
-                    },
-                    400
-                );
-
-            }
-
-
-            /* -------------------------
-               BASIC REFERENCE CHECK
-            ------------------------- */
-
-            if (
-                !/^[a-zA-Z0-9_.=-]+$/.test(
-                    reference
-                )
-            ) {
-
-                return jsonResponse(
-                    {
-                        success: false,
-                        message:
-                            "Invalid transaction reference"
-                    },
-                    400
-                );
-
-            }
-
-
-            /* -------------------------
-               VERIFY WITH PAYSTACK
-            ------------------------- */
-
-            const paystackResponse =
-                await fetch(
-                    `https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`,
-                    {
-                        method: "GET",
-
-                        headers: {
-
-                            "Authorization":
-                                `Bearer ${secretKey}`
-
-                        }
-
-                    }
-                );
-
-
-            const result =
-                await paystackResponse.json();
-
-
-            /* -------------------------
-               PAYSTACK API ERROR
-            ------------------------- */
-
-            if (
-                !paystackResponse.ok ||
-                !result.status ||
-                !result.data
-            ) {
-
-                return jsonResponse(
-                    {
-                        success: false,
-
-                        message:
-                            result.message ||
-                            "Payment verification failed"
-                    },
-                    400
-                );
-
-            }
-
-
-            const transaction =
-                result.data;
-
-
-            /* -------------------------
-               TRANSACTION STATUS
-            ------------------------- */
-
-            const paymentSuccessful =
-                transaction.status ===
-                "success";
-
-
-            /* -------------------------
-               RETURN RESULT
-            ------------------------- */
-
-            return jsonResponse({
-
-                success: true,
-
-                paid:
-                    paymentSuccessful,
-
-                status:
-                    transaction.status,
-
-                reference:
-                    transaction.reference,
-
-                amount:
-                    transaction.amount,
-
-                currency:
-                    transaction.currency,
-
-                paidAt:
-                    transaction.paid_at || null,
-
-                channel:
-                    transaction.channel || null,
-
-                customer:
-                    transaction.customer
-                        ? {
-                            email:
-                                transaction.customer.email
-                        }
-                        : null
-
-            });
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Verify function error:",
-                error
-            );
-
-
-            return jsonResponse(
-                {
-                    success: false,
-                    message:
-                        "Payment verification failed"
-                },
-                500
-            );
-
-        }
-
+      );
     }
 
+    const url = new URL(request.url);
+    const reference = url.searchParams.get("reference");
+
+    if (!reference) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "Payment reference is required."
+        }),
+        {
+          status: 400,
+          headers
+        }
+      );
+    }
+
+    const response = await fetch(
+      `https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`,
+      {
+        method: "GET",
+
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.status) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message:
+            data.message || "Unable to verify payment."
+        }),
+        {
+          status: 400,
+          headers
+        }
+      );
+    }
+
+    const transaction = data.data;
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        paid: transaction.status === "success",
+        status: transaction.status,
+        reference: transaction.reference,
+        amount: transaction.amount,
+        currency: transaction.currency,
+        paidAt: transaction.paid_at,
+        channel: transaction.channel,
+
+        customer: {
+          email: transaction.customer?.email || ""
+        }
+      }),
+      {
+        status: 200,
+        headers
+      }
+    );
+
+  } catch (error) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: "Server error while verifying payment."
+      }),
+      {
+        status: 500,
+        headers
+      }
+    );
+  }
 };

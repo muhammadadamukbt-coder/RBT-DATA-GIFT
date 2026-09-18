@@ -1,506 +1,210 @@
-/* =========================================================
-   RBT DATA GIFT
-   PAYSTACK INITIALIZE TRANSACTION
-   VERCEL FUNCTION
-========================================================= */
-
 const PACKAGES = {
-    1: {
-        price: 999,
-        data: "7GB",
-        duration: "Monthly"
-    },
-
-    2: {
-        price: 4999,
-        data: "35GB",
-        duration: "Monthly"
-    },
-
-    3: {
-        price: 9999,
-        data: "65GB",
-        duration: "Monthly"
-    },
-
-    4: {
-        price: 14999,
-        data: "100GB",
-        duration: "2 Months"
-    },
-
-    5: {
-        price: 19999,
-        data: "140GB",
-        duration: "2 Months"
-    },
-
-    6: {
-        price: 24999,
-        data: "180GB",
-        duration: "2 Months"
-    },
-
-    7: {
-        price: 29999,
-        data: "220GB",
-        duration: "3 Months"
-    },
-
-    8: {
-        price: 34999,
-        data: "260GB",
-        duration: "6 Months"
-    },
-
-    9: {
-        price: 39999,
-        data: "299GB",
-        duration: "10 Months"
-    },
-
-    10: {
-        price: 49999,
-        data: "350GB",
-        duration: "Yearly"
-    }
+  1: { data: "7GB", duration: "Monthly", price: 999 },
+  2: { data: "35GB", duration: "Monthly", price: 4999 },
+  3: { data: "65GB", duration: "Monthly", price: 9999 },
+  4: { data: "100GB", duration: "2 Months", price: 14999 },
+  5: { data: "140GB", duration: "2 Months", price: 19999 },
+  6: { data: "180GB", duration: "2 Months", price: 24999 },
+  7: { data: "220GB", duration: "3 Months", price: 29999 },
+  8: { data: "260GB", duration: "6 Months", price: 34999 },
+  9: { data: "299GB", duration: "10 Months", price: 39999 },
+  10: { data: "350GB", duration: "Yearly", price: 49999 }
 };
 
+const NETWORKS = ["MTN", "Airtel", "Glo", "9mobile"];
 
-/* =========================================================
-   ALLOWED NETWORKS
-========================================================= */
+export default async (request) => {
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Content-Type": "application/json"
+  };
 
-const ALLOWED_NETWORKS = [
-    "MTN",
-    "Airtel",
-    "Glo",
-    "9mobile"
-];
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers
+    });
+  }
 
-
-/* =========================================================
-   CORS HEADERS
-========================================================= */
-
-function corsHeaders() {
-
-    return {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers":
-            "Content-Type",
-        "Content-Type":
-            "application/json"
-    };
-}
-
-
-/* =========================================================
-   JSON RESPONSE
-========================================================= */
-
-function jsonResponse(data, status = 200) {
-
+  if (request.method !== "POST") {
     return new Response(
-        JSON.stringify(data),
-        {
-            status: status,
-            headers: corsHeaders()
-        }
+      JSON.stringify({
+        success: false,
+        message: "Only POST requests are allowed."
+      }),
+      {
+        status: 405,
+        headers
+      }
     );
-}
+  }
 
+  try {
+    const secretKey = Netlify.env.get("PAYSTACK_SECRET_KEY");
 
-/* =========================================================
-   VERCEL FUNCTION
-========================================================= */
-
-export default {
-
-    async fetch(request) {
-
-        /* -------------------------
-           CORS PREFLIGHT
-        ------------------------- */
-
-        if (request.method === "OPTIONS") {
-
-            return new Response(
-                null,
-                {
-                    status: 204,
-                    headers: corsHeaders()
-                }
-            );
-
+    if (!secretKey) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "PAYSTACK_SECRET_KEY is not configured."
+        }),
+        {
+          status: 500,
+          headers
         }
-
-
-        /* -------------------------
-           ONLY POST
-        ------------------------- */
-
-        if (request.method !== "POST") {
-
-            return jsonResponse(
-                {
-                    success: false,
-                    message:
-                        "Only POST requests are allowed"
-                },
-                405
-            );
-
-        }
-
-
-        try {
-
-            /* -------------------------
-               SECRET KEY
-            ------------------------- */
-
-            const secretKey =
-                process.env.PAYSTACK_SECRET_KEY;
-
-
-            if (!secretKey) {
-
-                return jsonResponse(
-                    {
-                        success: false,
-                        message:
-                            "Paystack secret key is not configured"
-                    },
-                    500
-                );
-
-            }
-
-
-            /* -------------------------
-               READ REQUEST BODY
-            ------------------------- */
-
-            const body =
-                await request.json();
-
-
-            const {
-                packageId,
-                fullName,
-                phone,
-                network,
-                email
-            } = body;
-
-
-            /* -------------------------
-               VALIDATE PACKAGE
-            ------------------------- */
-
-            const id =
-                Number(packageId);
-
-
-            const selectedPackage =
-                PACKAGES[id];
-
-
-            if (!selectedPackage) {
-
-                return jsonResponse(
-                    {
-                        success: false,
-                        message:
-                            "Invalid package"
-                    },
-                    400
-                );
-
-            }
-
-
-            /* -------------------------
-               VALIDATE NAME
-            ------------------------- */
-
-            if (
-                typeof fullName !== "string" ||
-                fullName.trim().length < 2
-            ) {
-
-                return jsonResponse(
-                    {
-                        success: false,
-                        message:
-                            "Enter a valid full name"
-                    },
-                    400
-                );
-
-            }
-
-
-            /* -------------------------
-               VALIDATE PHONE
-            ------------------------- */
-
-            const cleanPhone =
-                String(phone || "")
-                    .replace(/\D/g, "");
-
-
-            if (
-                cleanPhone.length < 10 ||
-                cleanPhone.length > 15
-            ) {
-
-                return jsonResponse(
-                    {
-                        success: false,
-                        message:
-                            "Enter a valid phone number"
-                    },
-                    400
-                );
-
-            }
-
-
-            /* -------------------------
-               VALIDATE NETWORK
-            ------------------------- */
-
-            if (
-                !ALLOWED_NETWORKS.includes(
-                    network
-                )
-            ) {
-
-                return jsonResponse(
-                    {
-                        success: false,
-                        message:
-                            "Invalid network"
-                    },
-                    400
-                );
-
-            }
-
-
-            /* -------------------------
-               PAYSTACK EMAIL
-            ------------------------- */
-
-            let customerEmail =
-                typeof email === "string"
-                    ? email.trim()
-                    : "";
-
-
-            /*
-               Paystack requires an email
-               during transaction initialization.
-
-               If the customer does not provide
-               one, create a technical email
-               using the phone number.
-            */
-
-            if (!customerEmail) {
-
-                customerEmail =
-                    `${cleanPhone}@rbtdata.gift`;
-
-            }
-
-
-            /* -------------------------
-               BASIC EMAIL CHECK
-            ------------------------- */
-
-            if (
-                !customerEmail.includes("@")
-            ) {
-
-                return jsonResponse(
-                    {
-                        success: false,
-                        message:
-                            "Enter a valid email address"
-                    },
-                    400
-                );
-
-            }
-
-
-            /* -------------------------
-               UNIQUE REFERENCE
-            ------------------------- */
-
-            const reference =
-                `RBT-${Date.now()}-${Math.random()
-                    .toString(36)
-                    .substring(2, 8)
-                    .toUpperCase()}`;
-
-
-            /* -------------------------
-               PAYSTACK INITIALIZE
-               
-               Paystack amount is in
-               the lowest currency unit.
-
-               ₦999 = 99900 kobo
-            ------------------------- */
-
-            const paystackResponse =
-                await fetch(
-                    "https://api.paystack.co/transaction/initialize",
-                    {
-                        method: "POST",
-
-                        headers: {
-
-                            "Authorization":
-                                `Bearer ${secretKey}`,
-
-                            "Content-Type":
-                                "application/json"
-
-                        },
-
-                        body: JSON.stringify({
-
-                            email:
-                                customerEmail,
-
-                            amount:
-                                String(
-                                    selectedPackage.price * 100
-                                ),
-
-                            currency:
-                                "NGN",
-
-                            reference:
-                                reference,
-
-                            metadata: {
-
-                                business:
-                                    "RBT DATA GIFT",
-
-                                packageId:
-                                    id,
-
-                                data:
-                                    selectedPackage.data,
-
-                                duration:
-                                    selectedPackage.duration,
-
-                                price:
-                                    selectedPackage.price,
-
-                                fullName:
-                                    fullName.trim(),
-
-                                phone:
-                                    cleanPhone,
-
-                                network:
-                                    network
-
-                            }
-
-                        })
-
-                    }
-                );
-
-
-            const result =
-                await paystackResponse.json();
-
-
-            /* -------------------------
-               PAYSTACK ERROR
-            ------------------------- */
-
-            if (
-                !paystackResponse.ok ||
-                !result.status ||
-                !result.data
-            ) {
-
-                console.error(
-                    "Paystack initialization failed:",
-                    result
-                );
-
-
-                return jsonResponse(
-                    {
-                        success: false,
-
-                        message:
-                            result.message ||
-                            "Unable to initialize payment"
-                    },
-                    400
-                );
-
-            }
-
-
-            /* -------------------------
-               SUCCESS
-            ------------------------- */
-
-            return jsonResponse({
-
-                success: true,
-
-                message:
-                    "Payment initialized",
-
-                access_code:
-                    result.data.access_code,
-
-                authorization_url:
-                    result.data.authorization_url,
-
-                reference:
-                    result.data.reference
-
-            });
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Initialize function error:",
-                error
-            );
-
-
-            return jsonResponse(
-                {
-                    success: false,
-                    message:
-                        "Payment initialization failed"
-                },
-                500
-            );
-
-        }
-
+      );
     }
 
+    const body = await request.json();
+
+    const {
+      packageId,
+      fullName,
+      phone,
+      network,
+      email
+    } = body;
+
+    const selectedPackage = PACKAGES[packageId];
+
+    if (!selectedPackage) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "Invalid package selected."
+        }),
+        {
+          status: 400,
+          headers
+        }
+      );
+    }
+
+    if (!fullName || fullName.trim().length < 2) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "Please enter your full name."
+        }),
+        {
+          status: 400,
+          headers
+        }
+      );
+    }
+
+    const cleanPhone = String(phone || "").replace(/\D/g, "");
+
+    if (cleanPhone.length < 10 || cleanPhone.length > 15) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "Please enter a valid phone number."
+        }),
+        {
+          status: 400,
+          headers
+        }
+      );
+    }
+
+    if (!NETWORKS.includes(network)) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "Please select a valid network."
+        }),
+        {
+          status: 400,
+          headers
+        }
+      );
+    }
+
+    const customerEmail =
+      String(email || "").trim() ||
+      `${cleanPhone}@rbtdata.gift`;
+
+    const reference =
+      `RBT-${Date.now()}-${Math.random()
+        .toString(36)
+        .substring(2, 8)
+        .toUpperCase()}`;
+
+    const payload = {
+      email: customerEmail,
+      amount: selectedPackage.price * 100,
+      currency: "NGN",
+      reference,
+
+      metadata: {
+        business: "RBT DATA GIFT",
+        packageId,
+        data: selectedPackage.data,
+        duration: selectedPackage.duration,
+        price: selectedPackage.price,
+        fullName: fullName.trim(),
+        phone: cleanPhone,
+        network
+      }
+    };
+
+    const response = await fetch(
+      "https://api.paystack.co/transaction/initialize",
+      {
+        method: "POST",
+
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(payload)
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.status) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message:
+            data.message || "Unable to initialize payment."
+        }),
+        {
+          status: 400,
+          headers
+        }
+      );
+    }
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: "Payment initialized successfully.",
+        access_code: data.data.access_code,
+        authorization_url: data.data.authorization_url,
+        reference: data.data.reference
+      }),
+      {
+        status: 200,
+        headers
+      }
+    );
+
+  } catch (error) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: "Server error while initializing payment."
+      }),
+      {
+        status: 500,
+        headers
+      }
+    );
+  }
 };
